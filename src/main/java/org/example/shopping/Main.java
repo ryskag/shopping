@@ -1,5 +1,6 @@
 package org.example.shopping;
 
+import org.example.shopping.db.entity.ProductEntity;
 import org.example.shopping.db.repository.ProductRepository;
 import org.example.shopping.exception.ShoppingException;
 
@@ -29,8 +30,17 @@ public class Main implements AutoCloseable {
     }
 
     public void run() {
-        productRepository.insertNewProduct();
-        productRepository.listProducts();
+        productRepository.create("boo");
+        System.out.println("=================");
+        ProductEntity entity = productRepository.getById(6);
+        entity.setName("new name");
+        productRepository.update(entity);
+        System.out.println("=================");
+        System.out.println(productRepository.delete(14));
+        productRepository.list().forEach(System.out::println);
+        System.out.println("=================");
+        System.out.println(productRepository.getById(6));
+        System.out.println(productRepository.findById(50));
     }
 
     public static void main(String[] args) {
