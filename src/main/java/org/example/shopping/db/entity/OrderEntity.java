@@ -4,11 +4,11 @@ import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 
-public class OrderEntity implements Entity {
+public class OrderEntity implements DbEntity {
 
     private Integer id;
     private String status = "NEW";
-    private Map<ProductEntity, Integer> items = new HashMap<>();
+    private Map<Product, Integer> items = new HashMap<>();
     private Timestamp created;
 
     public Integer getId() {
@@ -27,15 +27,15 @@ public class OrderEntity implements Entity {
         this.status = status;
     }
 
-    public Map<ProductEntity, Integer> getItems() {
+    public Map<Product, Integer> getItems() {
         return items;
     }
 
-    public void setItems(Map<ProductEntity, Integer> items) {
+    public void setItems(Map<Product, Integer> items) {
         this.items = items;
     }
 
-    public void addItem(ProductEntity product, Integer quantity) {
+    public void addItem(Product product, Integer quantity) {
         items.put(product,items.getOrDefault(product,0) + quantity);
     }
 
