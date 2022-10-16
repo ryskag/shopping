@@ -1,13 +1,22 @@
 package org.example.shopping.db.entity;
 
-import java.sql.Timestamp;
+import javax.persistence.*;
+import java.time.Instant;
 
-public class ProductEntity implements Entity {
+@Entity
+@Table(name = "products")
+public class Product implements DbEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     private String name;
+
     private double price;
-    private Timestamp updated;
-    private Timestamp created;
+
+    private Instant updated = Instant.now();
+
+    private Instant created = Instant.now();
 
     @Override
     public Integer getId() {
@@ -34,19 +43,19 @@ public class ProductEntity implements Entity {
         this.price = price;
     }
 
-    public Timestamp getUpdated() {
+    public Instant getUpdated() {
         return updated;
     }
 
-    public void setUpdated(Timestamp updated) {
+    public void setUpdated(Instant updated) {
         this.updated = updated;
     }
 
-    public Timestamp getCreated() {
+    public Instant getCreated() {
         return created;
     }
 
-    public void setCreated(Timestamp created) {
+    public void setCreated(Instant created) {
         this.created = created;
     }
 

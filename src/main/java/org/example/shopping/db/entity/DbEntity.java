@@ -1,6 +1,6 @@
 package org.example.shopping.db.entity;
 
-public interface Entity {
+public interface DbEntity {
 
     Integer getId();
 }

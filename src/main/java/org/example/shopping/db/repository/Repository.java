@@ -1,11 +1,11 @@
 package org.example.shopping.db.repository;
 
-import org.example.shopping.db.entity.Entity;
+import org.example.shopping.db.entity.DbEntity;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface Repository<T extends Entity> {
+public interface Repository<T extends DbEntity> {
 
     List<T> list();
 
@@ -17,9 +17,10 @@ public interface Repository<T extends Entity> {
 
     void save(T entity);
 
-    boolean delete(int id);
+    void delete(int id);
 
-    default boolean delete(T entity) {
-        return delete(entity.getId());
+    default void delete(T entity) {
+        delete(entity.getId());
     }
+
 }

@@ -1,49 +1,44 @@
 package org.example.shopping;
 
 import org.example.shopping.db.entity.OrderEntity;
-import org.example.shopping.db.entity.ProductEntity;
+import org.example.shopping.db.entity.Product;
 import org.example.shopping.db.repository.OrderRepository;
 import org.example.shopping.db.repository.ProductRepository;
-import org.example.shopping.exception.ShoppingException;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.Properties;
+import javax.persistence.EntityManager;
 
 public class Main implements AutoCloseable {
 
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/";
-    private static final String DB_SCHEMA = "shopping";
-
-    private final Connection connection;
-    private final OrderRepository orderRepository;
-    private final ProductRepository productRepository;
+    private final EntityManager entityManager;
+    private OrderRepository orderRepository;
+    private ProductRepository productRepository;
 
     public Main() {
-        Properties databaseProperties = loadDatabaseProperties();
-        try {
-            connection = DriverManager.getConnection(DB_URL + DB_SCHEMA, databaseProperties);
-        } catch (SQLException e) {
-            throw new ShoppingException(e);
-        }
-        this.productRepository = new ProductRepository(connection);
-        this.orderRepository = new OrderRepository(connection, productRepository);
+
+        SessionFactory sessionFactory = new Configuration()
+                .configure("hibernate.cfg.xml")
+                .addAnnotatedClass(Product.class)
+                .buildSessionFactory();
+
+        entityManager = sessionFactory.createEntityManager();
+//      orderRepository = new OrderRepository(connection, productRepository);
+        productRepository = new ProductRepository(entityManager);
+
     }
 
     public void runProducts() {
-        ProductEntity newEntity = new ProductEntity();
-        newEntity.setName("BOO!");
+        Product newEntity = new Product();
+        newEntity.setName("test2");
         newEntity.setPrice(9.99);
         productRepository.save(newEntity);
         System.out.println("=================");
-        ProductEntity entity = productRepository.getById(6);
-        entity.setName("new name");
+        Product entity = productRepository.getById(6);
+        entity.setName("even newer name");
         productRepository.save(entity);
         System.out.println("=================");
-        System.out.println(productRepository.delete(14));
+        productRepository.delete(27);
         productRepository.list().forEach(System.out::println);
         System.out.println("=================");
         System.out.println(productRepository.getById(6));
@@ -64,27 +59,13 @@ public class Main implements AutoCloseable {
     public static void main(String[] args) {
         try (Main m = new Main()) {
             m.runProducts();
-            m.runOrders();
+//            m.runOrders();
         }
     }
 
-
-    private static Properties loadDatabaseProperties() {
-        try (InputStream is = ClassLoader.getSystemResourceAsStream("database.properties")) {
-            Properties properties = new Properties();
-            properties.load(is);
-            return properties;
-        } catch (IOException e) {
-            throw new ShoppingException(e);
-        }
-    }
 
     @Override
     public void close() {
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            throw new ShoppingException(e);
-        }
+        entityManager.close();
     }
 }

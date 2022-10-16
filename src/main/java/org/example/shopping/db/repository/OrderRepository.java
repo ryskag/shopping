@@ -1,7 +1,7 @@
 package org.example.shopping.db.repository;
 
 import org.example.shopping.db.entity.OrderEntity;
-import org.example.shopping.db.entity.ProductEntity;
+import org.example.shopping.db.entity.Product;
 import org.example.shopping.exception.ShoppingException;
 
 import java.sql.*;
@@ -83,7 +83,7 @@ public class OrderRepository implements Repository<OrderEntity> {
         }
     }
 
-    private void saveItem(Integer orderId, ProductEntity product, Integer quantity) {
+    private void saveItem(Integer orderId, Product product, Integer quantity) {
         String sql = "INSERT INTO order_items (order_id, product_id, quantity) VALUES (?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, orderId);
@@ -96,11 +96,10 @@ public class OrderRepository implements Repository<OrderEntity> {
     }
 
     @Override
-    public boolean delete(int id) {
+    public void delete(int id) {
         String sql = "DELETE FROM orders WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, id);
-            return stmt.executeUpdate() == 1;
         } catch (SQLException e) {
             throw new ShoppingException(e);
         }
@@ -132,14 +131,14 @@ public class OrderRepository implements Repository<OrderEntity> {
         }
     }
 
-    private Map<ProductEntity, Integer> loadItems(Integer orderId) {
+    private Map<Product, Integer> loadItems(Integer orderId) {
         String sql = "SELECT product_id, quantity FROM order_items WHERE order_id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, orderId);
             try (ResultSet rs = stmt.executeQuery()) {
-                Map<ProductEntity, Integer> items = new HashMap<>();
+                Map<Product, Integer> items = new HashMap<>();
                 while (rs.next()) {
-                    ProductEntity product = productRepository.getById(rs.getInt("product_id"));
+                    Product product = productRepository.getById(rs.getInt("product_id"));
                     items.put(product, rs.getInt("quantity"));
                 }
                 return items;
