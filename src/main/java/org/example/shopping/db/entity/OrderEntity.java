@@ -1,14 +1,18 @@
 package org.example.shopping.db.entity;
 
+import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.HashMap;
-import java.util.Map;
 
+@Entity
+@Table(name = "orders")
 public class OrderEntity implements DbEntity {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     private String status = "NEW";
-    private Map<Product, Integer> items = new HashMap<>();
+//    private Map<Product, Integer> items = new HashMap<>();
     private Timestamp created;
 
     public Integer getId() {
@@ -27,17 +31,17 @@ public class OrderEntity implements DbEntity {
         this.status = status;
     }
 
-    public Map<Product, Integer> getItems() {
-        return items;
-    }
+//    public Map<Product, Integer> getItems() {
+//        return items;
+//    }
 
-    public void setItems(Map<Product, Integer> items) {
-        this.items = items;
-    }
+//    public void setItems(Map<Product, Integer> items) {
+//        this.items = items;
+//    }
 
-    public void addItem(Product product, Integer quantity) {
-        items.put(product,items.getOrDefault(product,0) + quantity);
-    }
+//    public void addItem(Product product, Integer quantity) {
+//        items.put(product,items.getOrDefault(product,0) + quantity);
+//    }
 
     public Timestamp getCreated() {
         return created;
@@ -52,7 +56,7 @@ public class OrderEntity implements DbEntity {
         return "OrderEntity{" +
                 "id=" + id +
                 ", status='" + status + '\'' +
-                ", items=" + items +
+//                ", items=" + items +
                 ", created=" + created +
                 '}';
     }
