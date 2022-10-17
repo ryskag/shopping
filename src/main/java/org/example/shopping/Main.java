@@ -1,6 +1,6 @@
 package org.example.shopping;
 
-import org.example.shopping.db.entity.OrderEntity;
+import org.example.shopping.db.entity.Order;
 import org.example.shopping.db.entity.Product;
 import org.example.shopping.db.repository.OrderRepository;
 import org.example.shopping.db.repository.ProductRepository;
@@ -19,11 +19,12 @@ public class Main implements AutoCloseable {
 
         SessionFactory sessionFactory = new Configuration()
                 .configure("hibernate.cfg.xml")
+                .addAnnotatedClass(Order.class)
                 .addAnnotatedClass(Product.class)
                 .buildSessionFactory();
 
         entityManager = sessionFactory.createEntityManager();
-//      orderRepository = new OrderRepository(connection, productRepository);
+        orderRepository = new OrderRepository(entityManager, productRepository);
         productRepository = new ProductRepository(entityManager);
 
     }
@@ -48,18 +49,19 @@ public class Main implements AutoCloseable {
     public void runOrders() {
         System.out.println("____________________________________________________________");
         System.out.println("____________________________________________________________");
-        OrderEntity entity = new OrderEntity();
-        productRepository.list().stream()
-                .limit(3)
-                .forEach(product -> entity.addItem(product, 5));
-        orderRepository.save(entity);
+        Order entity = new Order();
+//        productRepository.list().stream()
+//                .limit(3)
+//                .forEach(product -> entity.addItem(product, 5));
+//        orderRepository.save(entity);
         orderRepository.list().forEach(System.out::println);
+        orderRepository.delete(123);
     }
 
     public static void main(String[] args) {
         try (Main m = new Main()) {
             m.runProducts();
-//            m.runOrders();
+            m.runOrders();
         }
     }
 

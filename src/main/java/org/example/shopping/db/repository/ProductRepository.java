@@ -39,9 +39,11 @@ public class ProductRepository implements Repository<Product> {
 
     @Override
     public void delete(int id) {
-        EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
-        entityManager.remove(getById(id));
-        transaction.commit();
+        findById(id).ifPresent(product -> {
+            EntityTransaction transaction = entityManager.getTransaction();
+            transaction.begin();
+            entityManager.remove(product);
+            transaction.commit();
+        });
     }
 }
