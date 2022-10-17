@@ -10,12 +10,15 @@ public class Product implements DbEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
     private double price;
 
     private Instant updated = Instant.now();
 
+    @Column(nullable = false)
     private Instant created = Instant.now();
 
     @Override
