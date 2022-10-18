@@ -15,10 +15,10 @@ public class Review {
 
     private String review;
 
-    @OneToOne(optional = false)
+    @ManyToOne(optional = false)
     private Product product;
 
-    @OneToOne(optional = false)
+    @ManyToOne(optional = false)
     private OrderItem orderItem;
 
     public Integer getId() {

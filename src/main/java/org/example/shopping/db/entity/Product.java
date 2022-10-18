@@ -60,6 +60,7 @@ public class Product implements DbEntity {
     }
 
     public void addReview(Review review) {
+        review.setProduct(this);
         reviews.add(review);
     }
 

@@ -74,17 +74,24 @@ public class Main implements AutoCloseable {
         Order order = orderRepository.list().get(0);
         OrderItem orderItem = order.getItems().get(0);
         Product product = orderItem.getProduct();
-        Review review = new Review();
-        review.setOrderItem(orderItem);
-        review.setProduct(product);
-        review.setRating(7);
-        review.setReview("meh");
-        product.addReview(review);
+        product.addReview(newReview(orderItem, 7, "meh"));
+        product.addReview(newReview(orderItem, 4, "meh"));
+        product.addReview(newReview(orderItem, 10, "meh"));
+        product.addReview(newReview(orderItem, 1, "meh"));
         productRepository.save(product);
 
         System.out.println("+++++++++++++++++++++++++++++");
         productRepository.list().forEach(System.out::println);
         System.out.println("+++++++++++++++++++++++++++++");
+        System.out.println("Rating: " + productRepository.getProductRating(product.getId()));
+    }
+
+    private Review newReview(OrderItem orderItem, int rating, String comment) {
+        Review review = new Review();
+        review.setOrderItem(orderItem);
+        review.setRating(rating);
+        review.setReview(comment);
+        return review;
     }
 
     public static void main(String[] args) {

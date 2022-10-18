@@ -46,4 +46,13 @@ public class ProductRepository implements Repository<Product> {
             transaction.commit();
         });
     }
+
+    public Double getProductRating(int id) {
+        return entityManager.createQuery("" +
+                "SELECT AVG(r.rating) " +
+                "FROM Review r " +
+                "WHERE r.product.id = ?1", Double.class)
+                .setParameter(1, id)
+                .getSingleResult();
+    }
 }
