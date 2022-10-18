@@ -3,10 +3,14 @@ package org.example.shopping;
 import org.example.shopping.db.entity.Order;
 import org.example.shopping.db.entity.OrderItem;
 import org.example.shopping.db.entity.Product;
+import org.example.shopping.db.entity.Review;
 import org.example.shopping.db.repository.OrderRepository;
 import org.example.shopping.db.repository.ProductRepository;
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
+import org.hibernate.boot.Metadata;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
 import javax.persistence.EntityManager;
 
@@ -17,13 +21,18 @@ public class Main implements AutoCloseable {
     private final ProductRepository productRepository;
 
     public Main() {
-
-        SessionFactory sessionFactory = new Configuration()
+        StandardServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                 .configure("hibernate.cfg.xml")
-                .addAnnotatedClass(Order.class)
-                .addAnnotatedClass(Product.class)
-                .addAnnotatedClass(OrderItem.class)
-                .buildSessionFactory();
+                .build();
+
+        MetadataSources metadataSources = new MetadataSources(serviceRegistry);
+        metadataSources.addAnnotatedClass(Order.class);
+        metadataSources.addAnnotatedClass(Review.class);
+        metadataSources.addAnnotatedClass(Product.class);
+        metadataSources.addAnnotatedClass(OrderItem.class);
+
+        Metadata metadata = metadataSources.buildMetadata();
+        SessionFactory sessionFactory = metadata.buildSessionFactory();
 
         entityManager = sessionFactory.createEntityManager();
         orderRepository = new OrderRepository(entityManager);
@@ -61,6 +70,21 @@ public class Main implements AutoCloseable {
         orderRepository.save(entity);
         orderRepository.list().forEach(System.out::println);
         orderRepository.delete(123);
+
+        Order order = orderRepository.list().get(0);
+        OrderItem orderItem = order.getItems().get(0);
+        Product product = orderItem.getProduct();
+        Review review = new Review();
+        review.setOrderItem(orderItem);
+        review.setProduct(product);
+        review.setRating(7);
+        review.setReview("meh");
+        product.addReview(review);
+        productRepository.save(product);
+
+        System.out.println("+++++++++++++++++++++++++++++");
+        productRepository.list().forEach(System.out::println);
+        System.out.println("+++++++++++++++++++++++++++++");
     }
 
     public static void main(String[] args) {

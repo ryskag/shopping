@@ -2,6 +2,8 @@ package org.example.shopping.db.entity;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "products")
@@ -20,6 +22,9 @@ public class Product implements DbEntity {
 
     @Column(nullable = false)
     private Instant created = Instant.now();
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
+    private List<Review> reviews = new ArrayList<>();
 
     @Override
     public Integer getId() {
@@ -46,6 +51,18 @@ public class Product implements DbEntity {
         this.price = price;
     }
 
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
+    }
+
+    public void addReview(Review review) {
+        reviews.add(review);
+    }
+
     public Instant getUpdated() {
         return updated;
     }
@@ -64,12 +81,13 @@ public class Product implements DbEntity {
 
     @Override
     public String toString() {
-        return "ProductEntity{" +
+        return "Product{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", price=" + price +
                 ", updated=" + updated +
                 ", created=" + created +
+                ", reviews=" + reviews +
                 '}';
     }
 }
