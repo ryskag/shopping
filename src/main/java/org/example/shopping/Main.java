@@ -46,32 +46,32 @@ public class Main implements AutoCloseable {
         newEntity.setPrice(9.99);
         productRepository.save(newEntity);
         System.out.println("=================");
-        Product entity = productRepository.list().get(0);
+        Product entity = productRepository.findAll().get(0);
         entity.setName("even newer name");
         productRepository.save(entity);
         System.out.println("=================");
         productRepository.delete(27);
-        productRepository.list().forEach(System.out::println);
+        productRepository.findAll().forEach(System.out::println);
         System.out.println("=================");
-        System.out.println(productRepository.getById(6));
-        System.out.println(productRepository.findById(50));
+        System.out.println(productRepository.get(6));
+        System.out.println(productRepository.find(50));
     }
 
     public void runOrders() {
         System.out.println("____________________________________________________________");
         System.out.println("____________________________________________________________");
         Order entity = new Order();
-        productRepository.list().stream()
+        productRepository.findAll().stream()
                 .limit(3)
                 .forEach(product -> entity.addItem(product, 5));
-        productRepository.list().stream()
+        productRepository.findAll().stream()
                 .limit(3)
                 .forEach(product -> entity.addItem(product, 2));
         orderRepository.save(entity);
-        orderRepository.list().forEach(System.out::println);
+        orderRepository.findAll().forEach(System.out::println);
         orderRepository.delete(123);
 
-        Order order = orderRepository.list().get(0);
+        Order order = orderRepository.findAll().get(0);
         OrderItem orderItem = order.getItems().get(0);
         Product product = orderItem.getProduct();
         product.addReview(newReview(orderItem, 7, "meh"));
@@ -81,7 +81,7 @@ public class Main implements AutoCloseable {
         productRepository.save(product);
 
         System.out.println("+++++++++++++++++++++++++++++");
-        productRepository.list().forEach(System.out::println);
+        productRepository.findAll().forEach(System.out::println);
         System.out.println("+++++++++++++++++++++++++++++");
         System.out.println("Rating: " + productRepository.getProductRating(product.getId()));
     }
