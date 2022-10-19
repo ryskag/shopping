@@ -6,6 +6,8 @@ import org.example.shopping.db.entity.Product;
 import org.example.shopping.db.entity.Review;
 import org.example.shopping.db.repository.OrderRepository;
 import org.example.shopping.db.repository.ProductRepository;
+import org.example.shopping.test.OrderEntityTest;
+import org.example.shopping.test.ProductEntityTest;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
@@ -40,67 +42,16 @@ public class Main implements AutoCloseable {
 
     }
 
-    public void runProducts() {
-        Product newEntity = new Product();
-        newEntity.setName("test2");
-        newEntity.setPrice(9.99);
-        productRepository.save(newEntity);
-        System.out.println("=================");
-        Product entity = productRepository.findAll().get(0);
-        entity.setName("even newer name");
-        productRepository.save(entity);
-        System.out.println("=================");
-        productRepository.delete(27);
-        productRepository.findAll().forEach(System.out::println);
-        System.out.println("=================");
-        System.out.println(productRepository.get(6));
-        System.out.println(productRepository.find(50));
-    }
-
-    public void runOrders() {
-        System.out.println("____________________________________________________________");
-        System.out.println("____________________________________________________________");
-        Order entity = new Order();
-        productRepository.findAll().stream()
-                .limit(3)
-                .forEach(product -> entity.addItem(product, 5));
-        productRepository.findAll().stream()
-                .limit(3)
-                .forEach(product -> entity.addItem(product, 2));
-        orderRepository.save(entity);
-        orderRepository.findAll().forEach(System.out::println);
-        orderRepository.delete(123);
-
-        Order order = orderRepository.findAll().get(0);
-        OrderItem orderItem = order.getItems().get(0);
-        Product product = orderItem.getProduct();
-        product.addReview(newReview(orderItem, 7, "meh"));
-        product.addReview(newReview(orderItem, 4, "meh"));
-        product.addReview(newReview(orderItem, 10, "meh"));
-        product.addReview(newReview(orderItem, 1, "meh"));
-        productRepository.save(product);
-
-        System.out.println("+++++++++++++++++++++++++++++");
-        productRepository.findAll().forEach(System.out::println);
-        System.out.println("+++++++++++++++++++++++++++++");
-        System.out.println("Rating: " + productRepository.getProductRating(product.getId()));
-    }
-
-    private Review newReview(OrderItem orderItem, int rating, String comment) {
-        Review review = new Review();
-        review.setOrderItem(orderItem);
-        review.setRating(rating);
-        review.setReview(comment);
-        return review;
+    public void runEntityTests() {
+        new ProductEntityTest(productRepository).run();
+        new OrderEntityTest(orderRepository, productRepository).run();
     }
 
     public static void main(String[] args) {
         try (Main m = new Main()) {
-            m.runProducts();
-            m.runOrders();
+            m.runEntityTests();
         }
     }
-
 
     @Override
     public void close() {
