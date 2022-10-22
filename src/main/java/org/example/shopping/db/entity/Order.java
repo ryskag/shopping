@@ -1,13 +1,12 @@
 package org.example.shopping.db.entity;
 
 import javax.persistence.*;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "orders")
-public class Order implements DbEntity {
+public class Order extends SimpleEntity<Integer> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,8 +17,7 @@ public class Order implements DbEntity {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "order")
     private List<OrderItem> items = new ArrayList<>();
 
-    private Instant created = Instant.now();
-
+    @Override
     public Integer getId() {
         return id;
     }
@@ -56,22 +54,12 @@ public class Order implements DbEntity {
         orderItem.setQuantity(orderItem.getQuantity() + quantity);
     }
 
-
-    public Instant getCreated() {
-        return created;
-    }
-
-    public void setCreated(Instant created) {
-        this.created = created;
-    }
-
     @Override
     public String toString() {
         return "OrderEntity{" +
                 "id=" + id +
                 ", status='" + status + '\'' +
                 ", items=" + items +
-                ", created=" + created +
                 '}';
     }
 }

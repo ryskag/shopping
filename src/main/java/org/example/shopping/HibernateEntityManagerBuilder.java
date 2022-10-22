@@ -1,9 +1,6 @@
 package org.example.shopping;
 
-import org.example.shopping.db.entity.Order;
-import org.example.shopping.db.entity.OrderItem;
-import org.example.shopping.db.entity.Product;
-import org.example.shopping.db.entity.Review;
+import org.example.shopping.db.entity.*;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
@@ -22,6 +19,7 @@ public class HibernateEntityManagerBuilder {
         MetadataSources metadataSources = new MetadataSources(serviceRegistry);
         metadataSources.addAnnotatedClass(Order.class);
         metadataSources.addAnnotatedClass(Review.class);
+        metadataSources.addAnnotatedClass(Address.class);
         metadataSources.addAnnotatedClass(Product.class);
         metadataSources.addAnnotatedClass(OrderItem.class);
 

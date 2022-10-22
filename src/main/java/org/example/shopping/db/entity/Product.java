@@ -7,7 +7,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "products")
-public class Product implements DbEntity {
+public class Product extends SimpleEntity<Integer> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -19,9 +19,6 @@ public class Product implements DbEntity {
     private double price;
 
     private Instant updated = Instant.now();
-
-    @Column(nullable = false)
-    private Instant created = Instant.now();
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
     private List<Review> reviews = new ArrayList<>();
@@ -72,14 +69,6 @@ public class Product implements DbEntity {
         this.updated = updated;
     }
 
-    public Instant getCreated() {
-        return created;
-    }
-
-    public void setCreated(Instant created) {
-        this.created = created;
-    }
-
     @Override
     public String toString() {
         return "Product{" +
@@ -87,7 +76,6 @@ public class Product implements DbEntity {
                 ", name='" + name + '\'' +
                 ", price=" + price +
                 ", updated=" + updated +
-                ", created=" + created +
                 ", reviews=" + reviews +
                 '}';
     }
