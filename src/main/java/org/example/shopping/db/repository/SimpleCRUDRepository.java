@@ -6,11 +6,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import java.util.List;
 
-public class SimpleCRUDRepository<T extends DbEntity> implements CRUDRepository<T> {
+public class SimpleCRUDRepository<ID, T extends DbEntity<ID>> implements CRUDRepository<ID, T> {
 
     protected final EntityManager entityManager;
     private final Class<T> entityClass;
-
 
     public SimpleCRUDRepository(EntityManager entityManager, Class<T> entityClass) {
         this.entityManager = entityManager;
@@ -26,7 +25,7 @@ public class SimpleCRUDRepository<T extends DbEntity> implements CRUDRepository<
     }
 
     @Override
-    public T get(int id) {
+    public T get(ID id) {
         return entityManager.find(entityClass, id);
     }
 

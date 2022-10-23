@@ -5,7 +5,7 @@ import org.example.shopping.db.entity.DbEntity;
 import java.util.List;
 import java.util.Optional;
 
-public interface CRUDRepository<T extends DbEntity> {
+public interface CRUDRepository<ID, T extends DbEntity<ID>> {
 
     /**
      * Create / Update
@@ -15,12 +15,12 @@ public interface CRUDRepository<T extends DbEntity> {
     /**
      * Read
      */
-    T get(int id);
+    T get(ID id);
 
     /**
      * Read
      */
-    default Optional<T> find(int id) {
+    default Optional<T> find(ID id) {
         return Optional.ofNullable(get(id));
     }
 
@@ -37,7 +37,7 @@ public interface CRUDRepository<T extends DbEntity> {
     /**
      * Delete
      */
-    default void delete(int id) {
+    default void delete(ID id) {
         find(id).ifPresent(this::delete);
     }
 }

@@ -4,7 +4,7 @@ import org.example.shopping.db.entity.Product;
 
 import javax.persistence.EntityManager;
 
-public class ProductRepository extends SimpleCRUDRepository<Product> {
+public class ProductRepository extends SimpleCRUDRepository<Integer, Product> {
 
     public ProductRepository(EntityManager entityManager) {
         super(entityManager, Product.class);

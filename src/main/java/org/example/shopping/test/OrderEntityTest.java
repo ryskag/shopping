@@ -4,22 +4,21 @@ import org.example.shopping.db.entity.Order;
 import org.example.shopping.db.entity.OrderItem;
 import org.example.shopping.db.entity.Product;
 import org.example.shopping.db.entity.Review;
-import org.example.shopping.db.repository.CRUDRepository;
+import org.example.shopping.db.repository.OrderRepository;
 import org.example.shopping.db.repository.ProductRepository;
 
-public class OrderEntityTest extends SimpleEntityTest<Order>{
+public class OrderEntityTest extends SimpleEntityTest<Integer, Order>{
 
     private final ProductRepository productRepository;
 
-    public OrderEntityTest(CRUDRepository<Order> repository, ProductRepository productRepository) {
+    public OrderEntityTest(OrderRepository repository, ProductRepository productRepository) {
         super(repository);
         this.productRepository = productRepository;
     }
 
     @Override
-    public void run() {
-        System.out.println("____________________________________________________________");
-        System.out.println("____________________________________________________________");
+    public void runTest() {
+
         Order entity = new Order();
         productRepository.findAll().stream()
                 .limit(3)
@@ -41,9 +40,6 @@ public class OrderEntityTest extends SimpleEntityTest<Order>{
         product.addReview(newReview(orderItem, 10, "meh"));
         product.addReview(newReview(orderItem, 1, "meh"));
         productRepository.save(product);
-        System.out.println("+++++++++++++++++++++++++++++");
-        repository.findAll().forEach(System.out::println);
-        System.out.println("+++++++++++++++++++++++++++++");
     }
 
     private Review newReview(OrderItem orderItem, int rating, String comment) {

@@ -1,16 +1,18 @@
 package org.example.shopping.test;
 
 import org.example.shopping.db.entity.Address;
-import org.example.shopping.db.repository.CRUDRepository;
+import org.example.shopping.db.repository.AddressRepository;
 
-public class AddressEntityTest extends SimpleEntityTest<Address> {
+import java.util.UUID;
 
-    public AddressEntityTest(CRUDRepository<Address> repository) {
+public class AddressEntityTest extends SimpleEntityTest<UUID, Address> {
+
+    public AddressEntityTest(AddressRepository repository) {
         super(repository);
     }
 
     @Override
-    public void run() {
+    public void runTest() {
         Address address = new Address();
         address.setName("Home");
         address.setCountry("Lithuania");
@@ -20,6 +22,5 @@ public class AddressEntityTest extends SimpleEntityTest<Address> {
         address.setStreet2("D/K 123");
         address.setPost("04116");
         repository.save(address);
-        repository.findAll().forEach(System.out::println);
     }
 }

@@ -17,6 +17,7 @@ public class HibernateEntityManagerBuilder {
                 .build();
 
         MetadataSources metadataSources = new MetadataSources(serviceRegistry);
+        metadataSources.addAnnotatedClass(User.class);
         metadataSources.addAnnotatedClass(Order.class);
         metadataSources.addAnnotatedClass(Review.class);
         metadataSources.addAnnotatedClass(Address.class);

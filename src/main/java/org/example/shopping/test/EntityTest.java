@@ -1,7 +1,9 @@
 package org.example.shopping.test;
 
-import org.example.shopping.db.entity.DbEntity;
+public interface EntityTest {
 
-public interface EntityTest<T extends DbEntity> {
+    String prefix = "==============================";
+    String suffix = "==============================";
+
     void run();
 }
