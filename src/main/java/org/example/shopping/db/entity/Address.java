@@ -31,9 +31,8 @@ public class Address extends SimpleEntity<UUID> {
     @Column(nullable = false)
     private String post;
 
-//    @Column(nullable = false)
-//    private Integer userId;
-
+    @ManyToOne
+    private User user;
 
     @Override
     public UUID getId() {
@@ -98,6 +97,14 @@ public class Address extends SimpleEntity<UUID> {
 
     public void setPost(String post) {
         this.post = post;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override

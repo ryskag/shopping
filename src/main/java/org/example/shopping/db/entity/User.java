@@ -1,9 +1,8 @@
 package org.example.shopping.db.entity;
 
-import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -19,6 +18,9 @@ public class User extends SimpleEntity<UserId>{
     private String username;
 
     private String password;
+
+    @OneToMany(cascade  = CascadeType.ALL, mappedBy = "user")
+    private List<Address> addresses = new ArrayList<>();
 
     @Override
     public UserId getId() {
@@ -53,6 +55,18 @@ public class User extends SimpleEntity<UserId>{
         this.password = password;
     }
 
+    public List<Address> getAddresses() {
+        return addresses;
+    }
+
+    public void setAddresses(List<Address> addresses) {
+        this.addresses = addresses;
+    }
+
+    public void addAddress(Address address) {
+        addresses.add(address);
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -60,6 +74,7 @@ public class User extends SimpleEntity<UserId>{
                 ", email='" + email + '\'' +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
+                ", addresses=" + addresses +
                 '}';
     }
 }
