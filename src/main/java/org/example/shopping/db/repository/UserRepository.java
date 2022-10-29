@@ -1,13 +1,12 @@
 package org.example.shopping.db.repository;
 
 import org.example.shopping.db.entity.User;
-import org.example.shopping.db.entity.UserId;
 
-import javax.persistence.EntityManager;
+import java.util.UUID;
 
-public class UserRepository extends SimpleCRUDRepository<UserId, User>{
+public class UserRepository extends SimpleCRUDRepository<UUID, User>{
 
-    public UserRepository(EntityManager entityManager) {
-        super(entityManager, User.class);
+    public UserRepository() {
+        super(User.class);
     }
 }

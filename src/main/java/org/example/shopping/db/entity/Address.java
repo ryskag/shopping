@@ -11,27 +11,21 @@ public class Address extends SimpleEntity<UUID> {
     @GeneratedValue
     private UUID id;
 
-    @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
     private String country;
 
-    @Column(nullable = false)
     private String city;
 
-    @Column(nullable = false)
     private String state;
 
-    @Column(nullable = false)
     private String street1;
 
     private String street2;
 
-    @Column(nullable = false)
     private String post;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private User user;
 
     @Override

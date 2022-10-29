@@ -1,4 +1,4 @@
-package org.example.shopping.test;
+package org.example.shopping.test.entity;
 
 import org.example.shopping.db.entity.Product;
 import org.example.shopping.db.repository.ProductRepository;
@@ -13,11 +13,17 @@ public class ProductEntityTest extends SimpleEntityTest<Integer, Product> {
     }
 
     @Override
+    public Product newEntity() {
+        Product product = new Product();
+        product.setName("test2");
+        product.setPrice(9.99);
+        repository.save(product);
+        return product;
+    }
+
+    @Override
     public void runTest() {
-        Product newEntity = new Product();
-        newEntity.setName("test2");
-        newEntity.setPrice(9.99);
-        repository.save(newEntity);
+        newEntity();
         System.out.println("=================");
         Product entity = repository.findAll().get(0);
         entity.setName("even newer name");

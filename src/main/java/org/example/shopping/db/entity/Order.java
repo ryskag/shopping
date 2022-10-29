@@ -17,6 +17,9 @@ public class Order extends SimpleEntity<Integer> {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "order")
     private List<OrderItem> items = new ArrayList<>();
 
+    @ManyToOne(optional = false)
+    private User user;
+
     @Override
     public Integer getId() {
         return id;
@@ -52,6 +55,14 @@ public class Order extends SimpleEntity<Integer> {
                     return newOrderItem;
                 });
         orderItem.setQuantity(orderItem.getQuantity() + quantity);
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override

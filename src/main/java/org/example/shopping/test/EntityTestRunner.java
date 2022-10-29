@@ -1,15 +1,14 @@
 package org.example.shopping.test;
 
-import java.util.Arrays;
+import org.example.shopping.test.entity.EntityTest;
 
 public class EntityTestRunner {
 
-    public static void runTests(EntityTest... tests) {
-        Arrays.stream(tests).forEach(EntityTestRunner::runTest);
+    public static void runTests() {
+        EntityTestProvider.INSTANCE.getAllEntityTests().forEach(EntityTestRunner::runTest);
     }
 
-    private static void runTest(EntityTest test) {
-        System.out.printf("%s %s %s%n", EntityTest.prefix, test.getClass().getSimpleName(), EntityTest.suffix);
+    private static void runTest(EntityTest<?> test) {
         test.run();
     }
 }

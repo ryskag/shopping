@@ -1,9 +1,9 @@
-package org.example.shopping.test;
+package org.example.shopping.test.entity;
 
 import org.example.shopping.db.entity.DbEntity;
 import org.example.shopping.db.repository.CRUDRepository;
 
-public abstract class SimpleEntityTest<ID, T extends DbEntity<ID>> implements EntityTest {
+public abstract class SimpleEntityTest<ID, T extends DbEntity<ID>> implements EntityTest<T> {
 
     protected final CRUDRepository<ID, T> repository;
 
@@ -13,16 +13,17 @@ public abstract class SimpleEntityTest<ID, T extends DbEntity<ID>> implements En
 
     public abstract void runTest();
 
-    public void run()  {
-        printAllRecords();
+    @Override
+    public void saveEntity(T entity) {
+        repository.save(entity);
+    }
+
+    public final void run()  {
         runTest();
         printAllRecords();
-        System.out.println(prefix + prefix + suffix);
     }
 
     private void printAllRecords() {
-        System.out.println(prefix + " All Records " + suffix);
         repository.findAll().forEach(System.out::println);
     }
-
 }
