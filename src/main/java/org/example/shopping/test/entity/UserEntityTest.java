@@ -1,5 +1,6 @@
 package org.example.shopping.test.entity;
 
+import org.example.shopping.DatabaseSessionManager;
 import org.example.shopping.db.entity.Address;
 import org.example.shopping.db.entity.User;
 import org.example.shopping.db.repository.UserRepository;
@@ -23,6 +24,17 @@ public class UserEntityTest extends SimpleEntityTest<UUID, User> {
         return user;
     }
 
+    public void createMultipleUsersInOneTransactionWithRollback() {
+        DatabaseSessionManager.runInTransaction(entityManager -> {
+            repository.save(newEntity());
+            repository.save(newEntity());
+            repository.save(newEntity());
+            repository.save(newEntity());
+            repository.save(newEntity());
+            throw new RuntimeException("something bad happened!");
+        });
+    }
+
     @Override
     public void runTest() {
         User user = newEntity();
@@ -37,5 +49,7 @@ public class UserEntityTest extends SimpleEntityTest<UUID, User> {
 
         repository.save(user);
         System.out.println("Found User: " + repository.find(user.getId()));
+
+        createMultipleUsersInOneTransactionWithRollback();
     }
 }

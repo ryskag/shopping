@@ -17,7 +17,7 @@ public class DatabaseSessionManager {
     }
 
     public static void closeSession() {
-        if(ENTITY_MANAGER != null) {
+        if (ENTITY_MANAGER != null) {
             ENTITY_MANAGER.close();
         }
     }
@@ -29,9 +29,23 @@ public class DatabaseSessionManager {
     public static void runInTransaction(Consumer<EntityManager> dbAction) {
         withEntityManger(entityManager -> {
             EntityTransaction transaction = entityManager.getTransaction();
-            transaction.begin();
-            dbAction.accept(entityManager);
-            transaction.commit();
+            boolean isTransactionActive = transaction.isActive();
+
+            if (!isTransactionActive) {
+                transaction.begin();
+            }
+
+            try {
+                dbAction.accept(entityManager);
+                if (!isTransactionActive) {
+                    transaction.commit();
+                }
+            } catch (Exception e) {
+                System.err.println(e.getMessage());
+                if (!isTransactionActive) {
+                    transaction.rollback();
+                }
+            }
             return null;
         });
     }

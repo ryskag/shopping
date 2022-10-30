@@ -15,18 +15,21 @@ public class SimpleCRUDRepository<ID, T extends DbEntity<ID>> implements CRUDRep
         this.entityClass = entityClass;
     }
 
+    // ok
     @Override
     public void save(T entity) {
         runInTransaction(entityManager ->
                 entityManager.persist(entity));
     }
 
+    // ok
     @Override
     public T get(ID id) {
         return withEntityManger(entityManager ->
                 entityManager.find(entityClass, id));
     }
 
+    // ok
     @Override
     public List<T> findAll() {
         return withEntityManger(entityManager ->
@@ -34,9 +37,15 @@ public class SimpleCRUDRepository<ID, T extends DbEntity<ID>> implements CRUDRep
                         .getResultList());
     }
 
+    // ok
     @Override
     public void delete(T entity) {
-        runInTransaction(entityManager ->
-                entityManager.remove(entity));
+        runInTransaction(entityManager -> {
+            entityManager.remove(entity);
+        });
+//        EntityTransaction transaction = entityManager.getTransaction();
+//        transaction.begin();
+//        entityManager.remove(entity);
+//        transaction.commit();
     }
 }
