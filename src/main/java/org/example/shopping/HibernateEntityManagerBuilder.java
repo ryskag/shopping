@@ -22,6 +22,7 @@ public class HibernateEntityManagerBuilder {
         metadataSources.addAnnotatedClass(Review.class);
         metadataSources.addAnnotatedClass(Address.class);
         metadataSources.addAnnotatedClass(Product.class);
+        metadataSources.addAnnotatedClass(WishList.class);
         metadataSources.addAnnotatedClass(OrderItem.class);
 
         Metadata metadata = metadataSources.buildMetadata();
